@@ -1,0 +1,47 @@
+<!-- <h2>Rectangle Creator</h2>
+<p>Count: <input id="count" value="5"></p>
+<button id="create">Create</button>
+<button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('create').onclick = () => {
+  const textbox = document.getElementById('count');
+  const count = parseInt(textbox.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+</script> -->
+<h2>Design Creator</h2>
+<p>Count: <input id="count" value="5"></p>
+<p>Design Type: 
+  <select id="designType">
+    <option value="ellipse">Ellipse</option>
+    <option value="rectangle">Rectangle</option>
+    <option value="frame">Frame</option>
+    <option value="embed">Embed</option>
+  </select>
+</p>
+<p>Codes:</p>
+<textarea id="codes" rows="5" cols="30">/* Add your code here */</textarea>
+<button id="create">Create</button>
+<button id="cancel">Cancel</button>
+<script>
+  document.getElementById('create').onclick = () => {
+    const countTextbox = document.getElementById('count');
+    const designTypeSelect = document.getElementById('designType');
+    const codesTextarea = document.getElementById('codes');
+
+    const count = parseInt(countTextbox.value, 10);
+    const designType = designTypeSelect.value;
+    const codes = codesTextarea.value.split('\n').map(code => code.trim()).filter(code => code !== '');
+
+    parent.postMessage({ pluginMessage: { type: 'create-designs', count, designType, codes } }, '*');
+  }
+
+  document.getElementById('cancel').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+  }
+</script>
