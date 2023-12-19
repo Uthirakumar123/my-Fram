@@ -14,7 +14,7 @@ document.getElementById('cancel').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
 }
 </script> -->
-<h2>Design Creator</h2>
+<!-- <h2>Design Creator</h2>
 <p>Count: <input id="count" value="5"></p>
 <p>Design Type: 
   <select id="designType">
@@ -44,4 +44,78 @@ document.getElementById('cancel').onclick = () => {
   document.getElementById('cancel').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
   }
-</script>
+</script> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frame Details</title>
+</head>
+<body>
+  <h2>Frame Details</h2>
+  <div id="details-container">
+    <p id="frame-name">Name: </p>
+    <p id="frame-width">Width: </p>
+    <p id="frame-height">Height: </p>
+    <h3>Children:</h3>
+    <ul id="children-list"></ul>
+    <button id="edit-frame">Edit Frame</button>
+    <button id="duplicate-frame">Duplicate Frame</button>
+  </div>
+  <button id="cancel">Cancel</button>
+
+  <script>
+    window.onmessage = event => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'update-frame-details') {
+        updateFrameDetails(msg.frameDetails);
+      }
+    };
+
+    document.getElementById('cancel').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+
+    document.getElementById('edit-frame').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'edit-frame' } }, '*');
+    };
+
+    document.getElementById('duplicate-frame').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'duplicate-frame' } }, '*');
+    };
+
+    function updateFrameDetails(frameDetails) {
+      const frameNameElem = document.getElementById('frame-name');
+      const frameWidthElem = document.getElementById('frame-width');
+      const frameHeightElem = document.getElementById('frame-height');
+      const childrenListElem = document.getElementById('children-list');
+
+      frameNameElem.textContent = `Name: ${frameDetails.name}`;
+      frameWidthElem.textContent = `Width: ${frameDetails.width}`;
+      frameHeightElem.textContent = `Height: ${frameDetails.height}`;
+
+      childrenListElem.innerHTML = '';
+      frameDetails.children.forEach(child => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${child.name} - Type: ${child.type}`;
+
+        // Create a button for each child
+        const button = document.createElement('button');
+        button.textContent = 'Duplicate Child';
+        button.onclick = () => {
+          // Inform the plugin to duplicate the selected child
+          parent.postMessage({ pluginMessage: { type: 'duplicate-child', childName: child.name } }, '*');
+        };
+
+        // Append the button to the list item
+        listItem.appendChild(button);
+
+        childrenListElem.appendChild(listItem);
+      });
+    }
+
+    parent.postMessage({ pluginMessage: { type: 'show-frame-details' } }, '*');
+  </script>
+</body>
+</html>
