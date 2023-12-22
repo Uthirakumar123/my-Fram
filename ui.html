@@ -45,7 +45,7 @@ document.getElementById('cancel').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
   }
 </script> -->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -116,6 +116,37 @@ document.getElementById('cancel').onclick = () => {
     }
 
     parent.postMessage({ pluginMessage: { type: 'show-frame-details' } }, '*');
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duplicate Frame</title>
+</head>
+<body>
+  <h2>Duplicate Frame</h2>
+  <label for="screen-size">Select Screen Size:</label>
+  <select id="screen-size">
+    <option value="mobile">Mobile</option>
+    <option value="tablet">Tablet</option>
+    <option value="desktop">Desktop</option>
+  </select>
+  <button id="duplicate-frame">Duplicate Frame</button>
+  <button id="cancel">Cancel</button>
+
+  <script>
+    document.getElementById('cancel').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+
+    document.getElementById('duplicate-frame').onclick = () => {
+      const selectedSize = document.getElementById('screen-size').value;
+      parent.postMessage({ pluginMessage: { type: 'duplicate-frame', screenSize: selectedSize } }, '*');
+    };
   </script>
 </body>
 </html>
