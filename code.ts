@@ -112,7 +112,7 @@
 //       }
 //     }
 //   }
-  
+
 
 //   if (msg.type === 'cancel') {
 //     figma.closePlugin();
@@ -161,27 +161,41 @@ figma.ui.onmessage = msg => {
   }
 };
 
-// function adjustFrameForScreenSize(frame: any, screenSize: string) {
+// function adjustFrameForScreenSize(frame: FrameNode, screenSize: string) {
+//   console.log(frame.children, "frame")
 //   // Define your size adjustments based on screen size
 //   const sizeAdjustments = {
 //     mobile: { width: 320, height: 480 },
 //     tablet: { width: 768, height: 1024 },
 //     desktop: { width: 1366, height: 768 },
+//     watch: { width: 200, height: 200 },
+//     custom: { width: 800, height: 600 }, // Replace with your custom width and height values
 //   };
 
-//   // Apply adjustments
-//   frame.resize(sizeAdjustments[screenSize].width, sizeAdjustments[screenSize].height);
-//   // You can also adjust the frame position if needed
+
+//   const newSize = sizeAdjustments[screenSize];
+
+//   // Resize the frame
+//   frame.resize(newSize.width, newSize.height);
+//   if (frame) {
+//     console.log(frame.children, "frameframe")
+//   }
+
+//   // Adjust the position if needed
 //   frame.x += 100;
 //   frame.y += 100;
 // }
 
 function adjustFrameForScreenSize(frame: FrameNode, screenSize: string) {
+  console.log(frame.children, "frame");
+
   // Define your size adjustments based on screen size
   const sizeAdjustments = {
     mobile: { width: 320, height: 480 },
     tablet: { width: 768, height: 1024 },
     desktop: { width: 1366, height: 768 },
+    watch: { width: 200, height: 200 },
+    custom: { width: 800, height: 600 }, // Replace with your custom width and height values
   };
 
   const newSize = sizeAdjustments[screenSize];
@@ -192,4 +206,29 @@ function adjustFrameForScreenSize(frame: FrameNode, screenSize: string) {
   // Adjust the position if needed
   frame.x += 100;
   frame.y += 100;
+
+  // Resize children nodes
+  if (frame.children) {
+    for (const child of frame.children) {
+      // Assuming child has a 'resize' method
+      if (child.resize) {
+        console.log(child, "childchild")
+        console.log("newSize:", newSize);
+        console.log("child.width:", child.width);
+        console.log("child.height:", child.height);
+        console.log("frame.width",frame.width)
+        console.log("frame.height",frame.height)
+        const childNewWidth = newSize.width * (child.width / frame.width);
+        const childNewHeight = newSize.height * (child.height / frame.height);
+
+        child.resize(childNewWidth, childNewHeight);
+      }
+
+      // Adjust the position of children if needed
+      // child.x += 50;
+      // child.y += 50;
+    }
+  }
+
+  console.log(frame.children, "frameframe");
 }
